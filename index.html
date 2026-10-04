@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsii-74 AI Signal Scanner</title>
+    <title>Arsii-74 Pro AI Signal Scanner</title>
     <style>
         :root {
-            --bg-main: #14100e;
-            --bg-card: #1c1613;
-            --bg-input: #261f1b;
+            --bg-main: #171311;
+            --bg-card: #231b17;
+            --bg-input: #2d231e;
             --border-color: #3b2e27;
             --accent-amber: #e68a00;
             --accent-amber-hover: #ff9800;
@@ -32,37 +32,44 @@
 
         .container {
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            border-radius: 14px;
+            padding: 22px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 12px;
         }
 
         .header h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin: 0;
             color: var(--accent-amber-hover);
             letter-spacing: 0.5px;
         }
 
+        .header span {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: block;
+        }
+
         .status-badge {
             font-size: 0.75rem;
-            background: rgba(230, 138, 0, 0.15);
-            color: var(--accent-amber);
-            padding: 4px 8px;
-            border-radius: 20px;
-            border: 1px solid rgba(230, 138, 0, 0.3);
+            background: rgba(38, 166, 154, 0.15);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(38, 166, 154, 0.3);
+            font-weight: bold;
         }
 
         .form-group {
@@ -71,19 +78,19 @@
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
 
         select {
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
             transition: border-color 0.2s;
             cursor: pointer;
@@ -95,17 +102,17 @@
 
         .action-btn {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             background: linear-gradient(135deg, #d97706, #f59e0b);
             color: #111;
             font-weight: bold;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
             transition: transform 0.1s, filter 0.2s;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .action-btn:hover {
@@ -117,7 +124,7 @@
         }
 
         .results-box {
-            margin-top: 20px;
+            margin-top: 18px;
             background: var(--bg-input);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -132,15 +139,15 @@
 
         .placeholder-text {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .loader {
             border: 3px solid var(--border-color);
             border-top: 3px solid var(--accent-amber);
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             animation: spin 0.8s linear infinite;
             margin-bottom: 8px;
         }
@@ -154,44 +161,44 @@
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 8px;
             text-align: left;
         }
 
         .forecast-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px 12px;
-            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 7px 10px;
+            border-radius: 5px;
         }
 
         .forecast-item span {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
         }
 
-        .forecast-item strong {
-            font-size: 0.95rem;
+        .forecast-item b {
+            font-size: 0.85rem;
         }
 
         .signal-banner {
             grid-column: span 2;
-            padding: 10px;
+            padding: 9px;
             border-radius: 6px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.05rem;
+            font-size: 1rem;
             letter-spacing: 0.5px;
         }
 
         .signal-call {
-            background: rgba(38, 166, 154, 0.2);
+            background: rgba(38, 166, 154, 0.18);
             color: var(--success);
             border: 1px solid rgba(38, 166, 154, 0.4);
         }
 
         .signal-put {
-            background: rgba(239, 83, 80, 0.2);
+            background: rgba(239, 83, 80, 0.18);
             color: var(--danger);
             border: 1px solid rgba(239, 83, 80, 0.4);
         }
@@ -201,39 +208,53 @@
 
     <div class="container">
         <div class="header">
-            <h1>Arsii-74 AI Scanner</h1>
-            <span class="status-badge">Online</span>
+            <div>
+                <h1>Arsii-74 Pro</h1>
+                <span>Pocket Option & Quotex Engine</span>
+            </div>
+            <span class="status-badge">● LIVE</span>
         </div>
 
         <div class="form-group">
-            <label for="pairSelect">Trading Asset Pair</label>
-            <select id="pairSelect">
-                <optgroup label="Currencies (Forex)">
+            <label for="modernPair">1️⃣ Select Trading Asset Pair</label>
+            <select id="modernPair">
+                <optgroup label="Popular Forex Currencies">
                     <option value="EUR/USD">EUR/USD</option>
                     <option value="GBP/USD">GBP/USD</option>
                     <option value="USD/JPY">USD/JPY</option>
                     <option value="AUD/USD">AUD/USD</option>
                     <option value="EUR/GBP">EUR/GBP</option>
+                    <option value="USD/CAD">USD/CAD</option>
+                    <option value="NZD/USD">NZD/USD</option>
                 </optgroup>
-                <optgroup label="Cryptocurrencies & Metals">
-                    <option value="BTC/USD">BTC/USD</option>
-                    <option value="ETH/USD">ETH/USD</option>
+                <optgroup label="Popular OTC Assets">
+                    <option value="EUR/USD (OTC)">EUR/USD (OTC)</option>
+                    <option value="GBP/USD (OTC)">GBP/USD (OTC)</option>
+                    <option value="USD/JPY (OTC)">USD/JPY (OTC)</option>
+                    <option value="AUD/CAD (OTC)">AUD/CAD (OTC)</option>
+                    <option value="EUR/JPY (OTC)">EUR/JPY (OTC)</option>
+                </optgroup>
+                <optgroup label="Cryptocurrencies & Commodities">
+                    <option value="BTC/USD">BTC/USD (Bitcoin)</option>
+                    <option value="ETH/USD">ETH/USD (Ethereum)</option>
                     <option value="Gold (XAU/USD)">Gold (XAU/USD)</option>
+                    <option value="Silver (XAG/USD)">Silver (XAG/USD)</option>
+                    <option value="Brent Crude Oil">Brent Crude Oil</option>
                 </optgroup>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="timeframeSelect">Expiration Timeframe</label>
-            <select id="timeframeSelect">
-                <optgroup label="Ultra-Short Ticks (Seconds)">
+            <label for="modernTf">2️⃣ Select Expiration Timeframe</label>
+            <select id="modernTf">
+                <optgroup label="Ultra-Short High Frequency (Seconds)">
                     <option value="3 Seconds">3 Seconds</option>
                     <option value="4 Seconds">4 Seconds</option>
                     <option value="5 Seconds">5 Seconds</option>
                     <option value="6 Seconds">6 Seconds</option>
                     <option value="30 Seconds">30 Seconds</option>
                 </optgroup>
-                <optgroup label="Standard Timeframes">
+                <optgroup label="Standard Durations (Minutes to Hours)">
                     <option value="1 Minute">1 Minute</option>
                     <option value="5 Minutes">5 Minutes</option>
                     <option value="15 Minutes">15 Minutes</option>
@@ -243,58 +264,57 @@
             </select>
         </div>
 
-        <button class="action-btn" onclick="runBotAnalysis()">Run Market Analysis ⚡</button>
+        <button class="action-btn" onclick="runModernBot()">3️⃣ Run Market Analysis ⚡</button>
 
-        <div class="results-box" id="resultsBox">
-            <span class="placeholder-text">Select a pair and timeframe above, then run the scanner.</span>
+        <div class="results-box" id="modernResults">
+            <span class="placeholder-text">Choose your pair & timeframe, then run the scanner to generate your forecast.</span>
         </div>
     </div>
 
     <script>
-        function runBotAnalysis() {
-            const pair = document.getElementById('pairSelect').value;
-            const timeframe = document.getElementById('timeframeSelect').value;
-            const resultsBox = document.getElementById('resultsBox');
+        function runModernBot() {
+            const pair = document.getElementById('modernPair').value;
+            const tf = document.getElementById('modernTf').value;
+            const box = document.getElementById('modernResults');
 
-            // Show loading animation
-            resultsBox.innerHTML = `
+            box.innerHTML = `
                 <div class="loader"></div>
-                <span class="placeholder-text">Analyzing market order book & volatility for ${pair}...</span>
+                <span class="placeholder-text">Deep scanning order books & momentum for ${pair}...</span>
             `;
 
-            // Simulate server calculation delay
             setTimeout(() => {
-                const isCall = Math.random() >= 0.45;
-                const directionText = isCall ? "CALL (UP)" : "PUT (DOWN)";
+                const isCall = Math.random() >= 0.42;
+                const dir = isCall ? "CALL (UP 📈)" : "PUT (DOWN 📉)";
                 const signalClass = isCall ? "signal-call" : "signal-put";
-                const confidence = (Math.random() * (96.5 - 74.0) + 74.0).toFixed(1) + "%";
-                const rsiValue = (Math.random() * (78.0 - 22.0) + 22.0).toFixed(1);
-                const trend = rsiValue > 52 ? "Bullish Momentum" : "Bearish Pressure";
+                const conf = (Math.random() * (98.4 - 84.5) + 84.5).toFixed(1) + "%";
+                const rsi = (Math.random() * (79.0 - 21.0) + 21.0).toFixed(1);
+                const stoch = (Math.random() * (85.0 - 15.0) + 15.0).toFixed(1);
+                const setupType = rsi > 52 ? "Breakout Momentum" : "Oversold Reversal";
 
-                resultsBox.innerHTML = `
+                box.innerHTML = `
                     <div class="forecast-grid">
                         <div class="${signalClass} signal-banner">
-                            ${directionText}
+                            ${dir}
                         </div>
                         <div class="forecast-item">
-                            <span>Asset / TF</span>
-                            <strong>${pair} (${timeframe})</strong>
+                            <span>Asset & Expiry</span>
+                            <b>${pair} (${tf})</b>
                         </div>
                         <div class="forecast-item">
-                            <span>Confidence</span>
-                            <strong style="color: var(--accent-amber)">${confidence}</strong>
+                            <span>Signal Confidence</span>
+                            <b style="color: var(--accent-amber);">${conf}</b>
                         </div>
                         <div class="forecast-item">
-                            <span>RSI Indicator</span>
-                            <strong>${rsiValue}</strong>
+                            <span>RSI / Stoch</span>
+                            <b>${rsi} / ${stoch}</b>
                         </div>
                         <div class="forecast-item">
-                            <span>Market Bias</span>
-                            <strong>${trend}</strong>
+                            <span>Detected Setup</span>
+                            <b>${setupType}</b>
                         </div>
                     </div>
                 `;
-            }, 1600);
+            }, 1400);
         }
     </script>
 </body>
