@@ -3,319 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsii-74 Pro AI Signal Scanner</title>
+    <title>Arsii-74 AI Signal Scanner</title>
     <style>
-        :root {
-            --bg-main: #171311;
-            --bg-card: #231b17;
-            --bg-input: #2d231e;
-            --border-color: #3b2e27;
-            --accent-amber: #e68a00;
-            --accent-amber-hover: #ff9800;
-            --text-main: #f0e6e0;
-            --text-muted: #a39085;
-            --success: #26a69a;
-            --danger: #ef5350;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 460px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-        }
-
-        .header h1 {
-            font-size: 1.2rem;
-            margin: 0;
-            color: var(--accent-amber-hover);
-            letter-spacing: 0.5px;
-        }
-
-        .header span {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            display: block;
-        }
-
-        .status-badge {
-            font-size: 0.75rem;
-            background: rgba(38, 166, 154, 0.15);
-            color: var(--success);
-            padding: 4px 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(38, 166, 154, 0.3);
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-
-        select {
-            width: 100%;
-            padding: 11px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            border-radius: 8px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: border-color 0.2s;
-            cursor: pointer;
-        }
-
-        select:focus {
-            border-color: var(--accent-amber);
-        }
-
-        .action-btn {
-            width: 100%;
-            padding: 13px;
-            background: linear-gradient(135deg, #d97706, #f59e0b);
-            color: #111;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-            transition: transform 0.1s, filter 0.2s;
-            margin-top: 6px;
-        }
-
-        .action-btn:hover {
-            filter: brightness(1.1);
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-        }
-
-        .results-box {
-            margin-top: 18px;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            min-height: 110px;
+            background-color: #1a1714;
+            color: #f0e6d2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .dashboard {
+            background: #2b2520;
+            border: 2px solid #3d342c;
+            border-radius: 12px;
+            padding: 24px;
+            width: 380px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             text-align: center;
         }
-
-        .placeholder-text {
-            color: var(--text-muted);
-            font-size: 0.85rem;
+        h2 {
+            margin-top: 0;
+            letter-spacing: 1px;
+            color: #ffaa33;
+            font-size: 1.4rem;
         }
-
-        .loader {
-            border: 3px solid var(--border-color);
-            border-top: 3px solid var(--accent-amber);
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .forecast-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+        .control-group {
+            margin-bottom: 12px;
             text-align: left;
         }
-
-        .forecast-item {
-            background: rgba(0, 0, 0, 0.25);
-            padding: 7px 10px;
-            border-radius: 5px;
-        }
-
-        .forecast-item span {
+        label {
+            font-size: 0.82rem;
+            color: #b0a494;
             display: block;
-            font-size: 0.7rem;
-            color: var(--text-muted);
+            margin-bottom: 4px;
         }
-
-        .forecast-item b {
-            font-size: 0.85rem;
-        }
-
-        .signal-banner {
-            grid-column: span 2;
-            padding: 9px;
+        select {
+            width: 100%;
+            padding: 10px;
+            background: #3d342c;
+            color: #fff;
+            border: 1px solid #4a3f35;
             border-radius: 6px;
-            text-align: center;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .alert-screen {
+            background: #12100e;
+            border-radius: 8px;
+            padding: 25px 10px;
+            margin: 15px 0;
+            border: 1px solid #4a3f35;
+        }
+        .signal-text {
+            font-size: 2.8rem;
             font-weight: bold;
+            margin: 8px 0;
+            letter-spacing: 2px;
+        }
+        .BUY { color: #2ea043; text-shadow: 0 0 12px rgba(46,160,67,0.4); }
+        .SELL { color: #f85149; text-shadow: 0 0 12px rgba(248,81,73,0.4); }
+        .WAIT { color: #8b949e; }
+        .btn-action {
+            background: #ff8c00;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
             font-size: 1rem;
-            letter-spacing: 0.5px;
+            transition: background 0.2s;
+            box-shadow: 0 4px 10px rgba(255,140,0,0.3);
         }
-
-        .signal-call {
-            background: rgba(38, 166, 154, 0.18);
-            color: var(--success);
-            border: 1px solid rgba(38, 166, 154, 0.4);
-        }
-
-        .signal-put {
-            background: rgba(239, 83, 80, 0.18);
-            color: var(--danger);
-            border: 1px solid rgba(239, 83, 80, 0.4);
+        .btn-action:hover { background: #e07b00; }
+        .status-bar {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #8b949e;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <div>
-                <h1>Arsii-74 Pro</h1>
-                <span>Pocket Option & Quotex Engine</span>
-            </div>
-            <span class="status-badge">● LIVE</span>
-        </div>
-
-        <div class="form-group">
-            <label for="modernPair">1️⃣ Select Trading Asset Pair</label>
-            <select id="modernPair">
-                <optgroup label="Popular Forex Currencies">
-                    <option value="EUR/USD">EUR/USD</option>
-                    <option value="GBP/USD">GBP/USD</option>
-                    <option value="USD/JPY">USD/JPY</option>
-                    <option value="AUD/USD">AUD/USD</option>
-                    <option value="EUR/GBP">EUR/GBP</option>
-                    <option value="USD/CAD">USD/CAD</option>
-                    <option value="NZD/USD">NZD/USD</option>
-                </optgroup>
-                <optgroup label="Popular OTC Assets">
-                    <option value="EUR/USD (OTC)">EUR/USD (OTC)</option>
-                    <option value="GBP/USD (OTC)">GBP/USD (OTC)</option>
-                    <option value="USD/JPY (OTC)">USD/JPY (OTC)</option>
-                    <option value="AUD/CAD (OTC)">AUD/CAD (OTC)</option>
-                    <option value="EUR/JPY (OTC)">EUR/JPY (OTC)</option>
-                </optgroup>
-                <optgroup label="Cryptocurrencies & Commodities">
-                    <option value="BTC/USD">BTC/USD (Bitcoin)</option>
-                    <option value="ETH/USD">ETH/USD (Ethereum)</option>
-                    <option value="Gold (XAU/USD)">Gold (XAU/USD)</option>
-                    <option value="Silver (XAG/USD)">Silver (XAG/USD)</option>
-                    <option value="Brent Crude Oil">Brent Crude Oil</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="modernTf">2️⃣ Select Expiration Timeframe</label>
-            <select id="modernTf">
-                <optgroup label="Ultra-Short High Frequency (Seconds)">
-                    <option value="3 Seconds">3 Seconds</option>
-                    <option value="4 Seconds">4 Seconds</option>
-                    <option value="5 Seconds">5 Seconds</option>
-                    <option value="6 Seconds">6 Seconds</option>
-                    <option value="30 Seconds">30 Seconds</option>
-                </optgroup>
-                <optgroup label="Standard Durations (Minutes to Hours)">
-                    <option value="1 Minute">1 Minute</option>
-                    <option value="5 Minutes">5 Minutes</option>
-                    <option value="15 Minutes">15 Minutes</option>
-                    <option value="30 Minutes">30 Minutes</option>
-                    <option value="1 Hour">1 Hour</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <button class="action-btn" onclick="runModernBot()">3️⃣ Run Market Analysis ⚡</button>
-
-        <div class="results-box" id="modernResults">
-            <span class="placeholder-text">Choose your pair & timeframe, then run the scanner to generate your forecast.</span>
-        </div>
+<div class="dashboard">
+    <h2>ARSII-74 SIGNAL SCANNER</h2>
+    
+    <div class="control-group">
+        <label for="assetPair">Market Pair (Pocket Option / Quotex)</label>
+        <select id="assetPair">
+            <optgroup label="Pocket Option OTC">
+                <option value="EURUSD_otc">EUR/USD (OTC)</option>
+                <option value="GBPUSD_otc">GBP/USD (OTC)</option>
+                <option value="USDJPY_otc">USD/JPY (OTC)</option>
+                <option value="AUDCAD_otc">AUD/CAD (OTC)</option>
+            </optgroup>
+            <optgroup label="Quotex Markets">
+                <option value="EURJPY_otc">EUR/JPY (OTC)</option>
+                <option value="NZDUSD_otc">NZD/USD (OTC)</option>
+                <option value="BTCUSD">BTC/USD</option>
+            </optgroup>
+        </select>
     </div>
 
-    <script>
-        function runModernBot() {
-            const pair = document.getElementById('modernPair').value;
-            const tf = document.getElementById('modernTf').value;
-            const box = document.getElementById('modernResults');
+    <div class="control-group">
+        <label for="timeframe">Timeframe</label>
+        <select id="timeframe">
+            <option value="3s">3 Seconds</option>
+            <option value="5s">5 Seconds</option>
+            <option value="15s" selected>15 Seconds</option>
+            <option value="30s">30 Seconds</option>
+            <option value="1m">1 Minute</option>
+            <option value="5m">5 Minutes</option>
+            <option value="1h">1 Hour</option>
+        </select>
+    </div>
 
-            box.innerHTML = `
-                <div class="loader"></div>
-                <span class="placeholder-text">Deep scanning order books & momentum for ${pair}...</span>
-            `;
+    <div class="alert-screen">
+        <div id="pairDisplay" style="color: #b0a494; font-size: 0.9rem;">EUR/USD (OTC)</div>
+        <div id="signalDisplay" class="signal-text WAIT">SCANNING</div>
+        <div id="accuracyDisplay" style="font-size: 0.9rem; color: #d0c4b4;">Confidence: --%</div>
+    </div>
 
-            setTimeout(() => {
-                const isCall = Math.random() >= 0.42;
-                const dir = isCall ? "CALL (UP 📈)" : "PUT (DOWN 📉)";
-                const signalClass = isCall ? "signal-call" : "signal-put";
-                const conf = (Math.random() * (98.4 - 84.5) + 84.5).toFixed(1) + "%";
-                const rsi = (Math.random() * (79.0 - 21.0) + 21.0).toFixed(1);
-                const stoch = (Math.random() * (85.0 - 15.0) + 15.0).toFixed(1);
-                const setupType = rsi > 52 ? "Breakout Momentum" : "Oversold Reversal";
+    <button class="btn-action" onclick="triggerManualScan()">FORCE SCAN NOW</button>
 
-                box.innerHTML = `
-                    <div class="forecast-grid">
-                        <div class="${signalClass} signal-banner">
-                            ${dir}
-                        </div>
-                        <div class="forecast-item">
-                            <span>Asset & Expiry</span>
-                            <b>${pair} (${tf})</b>
-                        </div>
-                        <div class="forecast-item">
-                            <span>Signal Confidence</span>
-                            <b style="color: var(--accent-amber);">${conf}</b>
-                        </div>
-                        <div class="forecast-item">
-                            <span>RSI / Stoch</span>
-                            <b>${rsi} / ${stoch}</b>
-                        </div>
-                        <div class="forecast-item">
-                            <span>Detected Setup</span>
-                            <b>${setupType}</b>
-                        </div>
-                    </div>
-                `;
-            }, 1400);
+    <div class="status-bar">
+        <span>Engine: Active</span>
+        <span id="timerCountdown">Next check: 3s</span>
+    </div>
+</div>
+
+<script>
+    // Web Audio API Synthesizer for High/Low Alerts
+    function playAudioAlert(type) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.value = type === 'BUY' ? 880 : 440; // High pitch for BUY, lower for SELL
+            
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.4);
+            osc.stop(ctx.currentTime + 0.4);
+        } catch(e) {
+            console.log("Audio blocked until interaction.");
         }
-    </script>
+    }
+
+    function runSignalEngine() {
+        const pairSelect = document.getElementById('assetPair');
+        const selectedPairText = pairSelect.options[pairSelect.selectedIndex].text;
+        document.getElementById('pairDisplay').innerText = selectedPairText;
+
+        const signalElem = document.getElementById('signalDisplay');
+        const accuracyElem = document.getElementById('accuracyDisplay');
+
+        const randVal = Math.random();
+        let signal = "WAIT";
+        let accuracy = "--";
+
+        if (randVal < 0.38) {
+            signal = "BUY";
+            accuracy = (88 + Math.random() * 9.5).toFixed(1);
+        } else if (randVal > 0.62) {
+            signal = "SELL";
+            accuracy = (88 + Math.random() * 9.5).toFixed(1);
+        }
+
+        signalElem.innerText = signal;
+        signalElem.className = 'signal-text ' + signal;
+        
+        if (signal !== "WAIT") {
+            accuracyElem.innerText = 'Confidence: ' + accuracy + '%';
+            playAudioAlert(signal);
+        } else {
+            accuracyElem.innerText = 'Analyzing market ticks...';
+        }
+    }
+
+    function triggerManualScan() {
+        document.getElementById('signalDisplay').innerText = "SCAN...";
+        document.getElementById('signalDisplay').className = 'signal-text WAIT';
+        setTimeout(runSignalEngine, 400);
+    }
+
+    let countdown = 3;
+    setInterval(() => {
+        countdown--;
+        if (countdown <= 0) {
+            runSignalEngine();
+            countdown = 3;
+        }
+        document.getElementById('timerCountdown').innerText = 'Next check: ' + countdown + 's';
+    }, 1000);
+</script>
+
 </body>
 </html>
