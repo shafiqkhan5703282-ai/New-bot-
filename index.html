@@ -1,266 +1,398 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arsii - AI Voice Trading Bot</title>
-    <style>
-        body {
-            background-color: #1a1714;
-            color: #f0e6d2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .dashboard {
-            background: #2b2520;
-            border: 2px solid #3d342c;
-            border-radius: 12px;
-            padding: 24px;
-            width: 390px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-            text-align: center;
-        }
-        h2 {
-            margin-top: 0;
-            letter-spacing: 1px;
-            color: #ffaa33;
-            font-size: 1.4rem;
-        }
-        .control-group {
-            margin-bottom: 12px;
-            text-align: left;
-        }
-        label {
-            font-size: 0.82rem;
-            color: #b0a494;
-            display: block;
-            margin-bottom: 4px;
-        }
-        select {
-            width: 100%;
-            padding: 10px;
-            background: #3d342c;
-            color: #fff;
-            border: 1px solid #4a3f35;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            outline: none;
-        }
-        .alert-screen {
-            background: #12100e;
-            border-radius: 8px;
-            padding: 20px 10px;
-            margin: 15px 0;
-            border: 1px solid #4a3f35;
-        }
-        .signal-text {
-            font-size: 2.6rem;
-            font-weight: bold;
-            margin: 8px 0;
-            letter-spacing: 2px;
-        }
-        .BUY { color: #2ea043; text-shadow: 0 0 12px rgba(46,160,67,0.4); }
-        .SELL { color: #f85149; text-shadow: 0 0 12px rgba(248,81,73,0.4); }
-        .WAIT { color: #8b949e; }
-        .btn-mic {
-            background: #ff8c00;
-            color: #fff;
-            border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.05rem;
-            transition: background 0.2s;
-            box-shadow: 0 4px 10px rgba(255,140,0,0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-mic:hover { background: #e07b00; }
-        .listening { background: #d9534f !important; animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-        .status-bar {
-            margin-top: 15px;
-            font-size: 0.8rem;
-            color: #8b949e;
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<title>AI Voice Assistant & Signal Bot</title>
+<style>
+:root {
+  --bg:#0b1020; --panel:#131e33; --line:#293b59;
+  --text:#f2f6ff; --muted:#9bacc9; --blue:#75a7ff;
+  --green:#42d6a0; --red:#ff7185; --gold:#f2c879;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+main{max-width:1000px;margin:auto;padding:16px}
+header,.panel{
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:16px;margin-bottom:14px;
+}
+h1{font-size:25px;margin:0 0 7px}
+h2{font-size:19px;margin:0 0 12px}
+small,.muted{color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;margin:12px 0 6px;color:var(--muted)}
+input,select,textarea,button{
+  width:100%;padding:12px;border-radius:10px;
+  border:1px solid var(--line);font-size:15px;
+}
+input,select,textarea{background:#0b1426;color:var(--text)}
+button{background:var(--blue);color:#081326;font-weight:bold;cursor:pointer}
+button.secondary{background:#263650;color:white}
+button:disabled{opacity:.5}
+.row{display:flex;gap:8px;margin-top:10px}
+.row button{flex:1}
+.signal{font-size:36px;font-weight:bold;margin:14px 0}
+.UP{color:var(--green)}.DOWN{color:var(--red)}.WAIT{color:var(--gold)}
+.price{font-size:24px;font-weight:bold}
+#chat{
+  height:270px;overflow-y:auto;background:#0b1426;
+  border:1px solid var(--line);border-radius:10px;padding:10px;
+}
+.msg{padding:10px;margin:7px 0;border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere}
+.user{background:#213858}.bot{background:#19263d}
+#reasons li{margin:8px 0}
+.warning{
+  border-left:3px solid var(--gold);padding:10px;
+  background:#2b261b;color:#f6e6c1;font-size:13px;margin-top:14px;
+}
+@media(max-width:700px){
+  .grid{grid-template-columns:1fr}
+  main{padding:10px}
+  header,.panel{padding:13px}
+}
+</style>
 </head>
 <body>
+<main>
+<header>
+  <h1>AI Voice Assistant</h1>
+  <div class="muted">Pocket Option market analysis · English & Urdu</div>
+  <p id="status" class="muted">Checking backend connection…</p>
+</header>
 
-<div class="dashboard">
-    <h2>ARSII VOICE AI BOT</h2>
-    
-    <div class="control-group">
-        <label for="assetPair">Market Pair (Pocket Option / Quotex)</label>
-        <select id="assetPair">
-            <optgroup label="Pocket Option OTC">
-                <option value="EUR/USD OTC">EUR/USD (OTC)</option>
-                <option value="GBP/USD OTC">GBP/USD (OTC)</option>
-                <option value="USD/JPY OTC">USD/JPY (OTC)</option>
-            </optgroup>
-            <optgroup label="Quotex Markets">
-                <option value="EUR/JPY OTC">EUR/JPY (OTC)</option>
-                <option value="BTC/USD">BTC/USD</option>
-            </optgroup>
-        </select>
+<div class="grid">
+<section class="panel">
+  <h2>Market Signal</h2>
+  <label for="pair">Select currency pair</label>
+  <select id="pair">
+    <option>EUR/USD</option>
+    <option>GBP/USD</option>
+    <option>USD/JPY</option>
+    <option>AUD/USD</option>
+    <option>USD/CAD</option>
+    <option>USD/CHF</option>
+    <option>NZD/USD</option>
+    <option>EUR/JPY</option>
+    <option>GBP/JPY</option>
+    <option>EUR/GBP</option>
+    <option>EUR/CHF</option>
+    <option>AUD/JPY</option>
+    <option>GBP/CHF</option>
+    <option>CAD/JPY</option>
+    <option>CHF/JPY</option>
+  </select>
+
+  <label for="interval">Market data interval</label>
+  <select id="interval">
+    <option value="1min">1 minute</option>
+    <option value="5min">5 minutes</option>
+    <option value="15min">15 minutes</option>
+    <option value="30min">30 minutes</option>
+    <option value="1h">1 hour</option>
+  </select>
+
+  <div class="row">
+    <button id="generate">Generate New Signal</button>
+    <button id="refresh" class="secondary">Refresh Price</button>
+  </div>
+
+  <hr style="border-color:var(--line);margin:20px 0">
+
+  <div class="muted">Latest provider price</div>
+  <div id="price" class="price">—</div>
+  <p id="priceTime" class="muted">No live price loaded</p>
+
+  <div id="direction" class="signal WAIT">WAIT</div>
+  <p id="signalInfo" class="muted">Request a new analysis to begin.</p>
+  <ul id="reasons">
+    <li>Signals will appear here after live data is received.</li>
+  </ul>
+
+  <div class="warning">
+    External-market prices may differ from Pocket Option quotes.
+    OTC prices are not supplied by this starter. No signal guarantees
+    a profitable trade. The app never places trades automatically.
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Ask me anything</h2>
+
+  <label for="language">Language</label>
+  <select id="language">
+    <option value="en">English</option>
+    <option value="ur">Urdu</option>
+  </select>
+
+  <label for="speech">Read answers aloud</label>
+  <select id="speech">
+    <option value="yes">Voice ON</option>
+    <option value="no">Voice OFF</option>
+  </select>
+
+  <div id="chat" aria-live="polite">
+    <div class="msg bot">
+      Hello! Ask me a question, or request a new market signal.
+      Salaam! Aap mujh se sawal kar sakte hain.
     </div>
+  </div>
 
-    <div class="control-group">
-        <label for="timeframe">Timeframe</label>
-        <select id="timeframe">
-            <option value="3 seconds">3 Seconds</option>
-            <option value="5 seconds">5 Seconds</option>
-            <option value="15 seconds" selected>15 Seconds</option>
-            <option value="30 seconds">30 Seconds</option>
-            <option value="1 minute">1 Minute</option>
-        </select>
-    </div>
+  <label for="question">Your question</label>
+  <input id="question" placeholder="Ask something or request a signal">
 
-    <div class="alert-screen">
-        <div id="pairDisplay" style="color: #b0a494; font-size: 0.9rem;">EUR/USD (OTC)</div>
-        <div id="signalDisplay" class="signal-text WAIT">STANDBY</div>
-        <div id="accuracyDisplay" style="font-size: 0.9rem; color: #d0c4b4;">Say "Give me signal" or Tap Mic</div>
-    </div>
-
-    <button id="micBtn" class="btn-mic" onclick="toggleListening()">
-        🎤 ASK ARSII FOR SIGNAL
-    </button>
-
-    <div class="status-bar">
-        <span>Voice AI: Ready</span>
-        <span id="aiStatus">Microphone Active</span>
-    </div>
+  <div class="row">
+    <button id="send">Send</button>
+    <button id="microphone" class="secondary">🎙 Speak</button>
+  </div>
+  <div class="row">
+    <button id="stop" class="secondary">Stop Voice</button>
+    <button id="repeat" class="secondary">Repeat Answer</button>
+  </div>
+  <p id="voiceStatus" class="muted">Voice status: ready</p>
+</section>
 </div>
+</main>
 
 <script>
-    const synth = window.speechSynthesis;
-    let recognition;
-    let isListening = false;
+const $ = id => document.getElementById(id);
+let lastSpoken = "";
+let recognition = null;
 
-    // Initialize Web Speech Recognition API
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
+async function requestAPI(url, options = {}) {
+  const response = await fetch(url, {
+    headers: {"Content-Type":"application/json"},
+    ...options
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.detail || "Server request failed.");
+  }
+  return data;
+}
 
-        recognition.onresult = function(event) {
-            const speechText = event.results[0][0].transcript.toLowerCase();
-            document.getElementById('aiStatus').innerText = "Heard: \"" + speechText + "\"";
-            stopListeningState();
-            
-            // Process voice commands
-            if (speechText.includes('signal') || speechText.includes('buy') || speechText.includes('sell') || speechText.includes('scan') || speechText.includes('arsii')) {
-                executeSignalScan();
-            } else {
-                speakText("Command not recognized. Ask me for a trading signal.");
-            }
-        };
+function addMessage(message, who = "bot") {
+  const div = document.createElement("div");
+  div.className = "msg " + who;
+  div.textContent = message;
+  $("chat").appendChild(div);
+  $("chat").scrollTop = $("chat").scrollHeight;
+}
 
-        recognition.onerror = function() {
-            stopListeningState();
-            document.getElementById('aiStatus').innerText = "Mic error. Try again.";
-        };
+function speak(message) {
+  lastSpoken = message;
+  if ($("speech").value !== "yes") return;
 
-        recognition.onend = function() {
-            stopListeningState();
-        };
-    } else {
-        document.getElementById('aiStatus').innerText = "Speech API not supported in browser";
-    }
+  if (!("speechSynthesis" in window)) {
+    $("voiceStatus").textContent = "Speech playback is not supported.";
+    return;
+  }
 
-    function toggleListening() {
-        if (!recognition) {
-            alert("Speech recognition is not supported on this browser. Try Google Chrome.");
-            executeSignalScan(); // Fallback to manual scan if voice isn't supported
-            return;
-        }
+  speechSynthesis.cancel();
 
-        if (isListening) {
-            recognition.stop();
-            stopListeningState();
-        } else {
-            try {
-                recognition.start();
-                startListeningState();
-            } catch(e) {
-                executeSignalScan();
-            }
-        }
-    }
+  const utterance = new SpeechSynthesisUtterance(message);
+  const language = $("language").value;
+  utterance.lang = language === "ur" ? "ur-PK" : "en-US";
 
-    function startListeningState() {
-        isListening = true;
-        const btn = document.getElementById('micBtn');
-        btn.classList.add('listening');
-        btn.innerText = "LISTENING...";
-        document.getElementById('aiStatus').innerText = "Listening for your command...";
-    }
+  const voices = speechSynthesis.getVoices();
+  const prefix = language === "ur" ? "ur" : "en";
+  const selectedVoice = voices.find(v =>
+    v.lang.toLowerCase().startsWith(prefix)
+  );
+  if (selectedVoice) utterance.voice = selectedVoice;
 
-    function stopListeningState() {
-        isListening = false;
-        const btn = document.getElementById('micBtn');
-        btn.classList.remove('listening');
-        btn.innerText = "🎤 ASK ARSII FOR SIGNAL";
-    }
+  utterance.onstart = () =>
+    $("voiceStatus").textContent = "Speaking…";
+  utterance.onend = () =>
+    $("voiceStatus").textContent = "Voice finished.";
+  utterance.onerror = () =>
+    $("voiceStatus").textContent =
+      "Voice unavailable. Check device voice settings.";
 
-    function speakText(text) {
-        if (synth.speaking) {
-            synth.cancel();
-        }
-        const utterThis = new SpeechSynthesisUtterance(text);
-        utterThis.rate = 1.0;
-        utterThis.pitch = 1.0;
-        synth.speak(utterThis);
-    }
+  speechSynthesis.speak(utterance);
+}
 
-    function executeSignalScan() {
-        const pairSelect = document.getElementById('assetPair');
-        const selectedPair = pairSelect.value;
-        const timeframe = document.getElementById('timeframe').value;
-        
-        document.getElementById('pairDisplay').innerText = selectedPair;
-        document.getElementById('signalDisplay').innerText = "SCANNING...";
-        document.getElementById('signalDisplay').className = "signal-text WAIT";
-        document.getElementById('accuracyDisplay').innerText = "Analyzing indicators...";
-        
-        document.getElementById('aiStatus').innerText = "Calculating technical indicators...";
+async function checkServer() {
+  try {
+    const data = await requestAPI("/api/health");
+    $("status").textContent = data.live_data_configured
+      ? "Backend connected · Live data key configured"
+      : "Backend connected · Configure market-data API key";
+  } catch (error) {
+    $("status").textContent =
+      "Backend unavailable: " + error.message;
+  }
+}
 
-        setTimeout(() => {
-            // Algorithmic Signal Determination
-            const randVal = Math.random();
-            let signal = randVal < 0.5 ? "BUY" : "SELL";
-            let accuracy = (88 + Math.random() * 9.8).toFixed(1);
+async function refreshPrice() {
+  $("priceTime").textContent = "Requesting real provider data…";
+  try {
+    const data = await requestAPI(
+      "/api/candles?symbol=" +
+      encodeURIComponent($("pair").value) +
+      "&interval=" + encodeURIComponent($("interval").value)
+    );
 
-            const signalElem = document.getElementById('signalDisplay');
-            signalElem.innerText = signal;
-            signalElem.className = "signal-text " + signal;
-            document.getElementById('accuracyDisplay').innerText = 'Confidence: ' + accuracy + '%';
+    const last = data.candles[data.candles.length - 1];
+    $("price").textContent = Number(last.close).toPrecision(7);
+    $("priceTime").textContent =
+      "Source: " + data.source + " · Candle: " + last.datetime;
+  } catch (error) {
+    $("price").textContent = "—";
+    $("priceTime").textContent = error.message;
+  }
+}
 
-            // Voice response matching requested behavior
-            const voiceMessage = `Signal for ${selectedPair} on ${timeframe}. Direction is ${signal}. Confidence is ${accuracy} percent.`;
-            document.getElementById('aiStatus').innerText = "Signal ready & spoken";
-            speakText(voiceMessage);
-        }, 1200);
-    }
+async function generateSignal() {
+  const button = $("generate");
+  button.disabled = true;
+  button.textContent = "Analysing…";
+  $("signalInfo").textContent = "Checking market data…";
+
+  try {
+    const data = await requestAPI("/api/signal", {
+      method: "POST",
+      body: JSON.stringify({
+        symbol: $("pair").value,
+        interval: $("interval").value
+      })
+    });
+
+    $("direction").textContent = data.direction;
+    $("direction").className = "signal " + data.direction;
+    $("price").textContent = Number(data.latest_price).toPrecision(7);
+    $("priceTime").textContent =
+      "Source candle: " + data.candle_timestamp;
+    $("signalInfo").textContent =
+      "Generated: " + data.generated_at_utc +
+      " · Interval: " + data.data_interval;
+
+    $("reasons").replaceChildren();
+    data.reasons.forEach(reason => {
+      const li = document.createElement("li");
+      li.textContent = reason;
+      $("reasons").appendChild(li);
+    });
+
+    const message =
+      "New analysis generated. Pair: " + data.symbol +
+      ". Direction: " + data.direction +
+      ". Latest observed price: " + data.latest_price +
+      ". " + data.reasons.join(" ") +
+      " This is not a guaranteed prediction.";
+
+    addMessage(message);
+    speak(message);
+  } catch (error) {
+    $("direction").textContent = "WAIT";
+    $("direction").className = "signal WAIT";
+    $("signalInfo").textContent = error.message;
+    $("reasons").replaceChildren();
+
+    const li = document.createElement("li");
+    li.textContent =
+      "No signal generated because reliable market data was unavailable.";
+    $("reasons").appendChild(li);
+
+    addMessage("Signal unavailable: " + error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Generate New Signal";
+  }
+}
+
+async function sendQuestion() {
+  const message = $("question").value.trim();
+  if (!message) return;
+
+  $("question").value = "";
+  addMessage(message, "user");
+
+  // Explicit signal requests generate a fresh analysis.
+  const text = message.toLowerCase();
+  const signalRequest =
+    text.includes("generate a new signal") ||
+    text.includes("new signal") ||
+    text.includes("give me a signal") ||
+    text.includes("another signal") ||
+    text.includes("up or down");
+
+  if (signalRequest) {
+    await generateSignal();
+    return;
+  }
+
+  $("send").disabled = true;
+  try {
+    const data = await requestAPI("/api/chat", {
+      method: "POST",
+      body: JSON.stringify({
+        message,
+        language: $("language").value
+      })
+    });
+    addMessage(data.answer);
+    speak(data.answer);
+  } catch (error) {
+    addMessage("Assistant error: " + error.message);
+  } finally {
+    $("send").disabled = false;
+  }
+}
+
+function startListening() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    $("voiceStatus").textContent =
+      "Voice input is unsupported in this browser. Please type instead.";
+    return;
+  }
+
+  if (recognition) {
+    try { recognition.stop(); } catch (_) {}
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang =
+    $("language").value === "ur" ? "ur-PK" : "en-US";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () =>
+    $("voiceStatus").textContent = "Listening…";
+  recognition.onresult = event => {
+    $("question").value = event.results[0][0].transcript;
+    sendQuestion();
+  };
+  recognition.onerror = event =>
+    $("voiceStatus").textContent =
+      "Microphone error: " + event.error;
+  recognition.start();
+}
+
+$("generate").addEventListener("click", generateSignal);
+$("refresh").addEventListener("click", refreshPrice);
+$("send").addEventListener("click", sendQuestion);
+$("microphone").addEventListener("click", startListening);
+$("question").addEventListener("keydown", event => {
+  if (event.key === "Enter") sendQuestion();
+});
+$("stop").addEventListener("click", () => {
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  if (recognition) recognition.stop();
+  $("voiceStatus").textContent = "Voice stopped.";
+});
+$("repeat").addEventListener("click", () => {
+  if (lastSpoken) speak(lastSpoken);
+});
+checkServer();
 </script>
-
 </body>
 </html>
